@@ -23,7 +23,6 @@ bool login() {
         cin.clear();
         cin.ignore(1000, '\n');
     }
-
     cin.ignore(1000, '\n');
     cout << "Enter Password: ";
     getline(cin, password);
@@ -38,9 +37,14 @@ bool login() {
             return true;
         }
         else {
-            cout << "\nInvalid Student ID or Password " << endl;
-            return false;
-        }
+            cout << "\nInvalid Student ID or Password!" << endl;
+            attempts++;
+            if (attempts < MAX_ATTEMPTS)
+                cout << "Attempts remaining: " << (MAX_ATTEMPTS - attempts) << endl;
+            else {
+                cout << "\nToo many failed attempts. Try again later..." << endl;
+                system("pause");
+                system("cls");
     }
     else if (role == 2) {
         int adminIndex = findAdmin(id, password);
@@ -50,10 +54,8 @@ bool login() {
                 << admins[adminIndex].adminID << ")" << endl;
             return true;
         }
-        cout << "\nInvalid Admin ID or Password " << endl;
-        return false;
     }
-    return false;
+    return -1;
 }
 
 void studentSignUp() {
