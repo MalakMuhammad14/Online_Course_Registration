@@ -47,7 +47,6 @@ bool login() {
                 system("cls");
     }
     else if (role == 2) {
-        int adminIndex = findAdmin(id, password);
         if (adminIndex != -1) {
             cout << "\nAdmin Login Successful" << endl;
             cout << "Welcome, " << admins[adminIndex].name << " (ID: "
@@ -232,20 +231,8 @@ void dropCourse() {  // ali [101, 102, 103, 104]
         cout << "Error: Course ID not found!\n";
         return;
 
-    }
 
-    if (courses[index].currentEnrolled > 0) {
-        cout << "Error: Cannot delete course. There are students enrolled in it!\n";
-    }
-    else {
-        for (int i = index; i < courseCount - 1; i++) {
-            courses[i] = courses[i + 1];
-        }
-        courseCount--;
-        cout << "Course deleted successfully.\n";
-    }
 }
-
 void viewMyCourses(int studentIndex) {
     if (students[studentIndex].numCourses == 0) {
         cout << "No registered courses yet.\n";
