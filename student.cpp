@@ -1,40 +1,38 @@
 #include "globals.h"
 
 // ================= LOGIN FUNCTION =================
-bool login() {
-    int id, role;
-    string password;
+int studentLogin() {
+    const int MAX_ATTEMPTS = 3;
+    int attempts = 0;
 
-    cout << "\n=== LOGIN ===" << endl;
-    cout << "Select Role:" << endl;
-    cout << "1. Student" << endl;
-    cout << "2. Admin" << endl;
-    cout << "Enter choice (1-2): ";
+    while (attempts < MAX_ATTEMPTS) {
+        int id;
+        string password;
 
-    while (!(cin >> role)  role < 1  role > 2) {
-        cout << "Invalid input! Please enter a number (1-2): ";
-        cin.clear();
+        cout << "\n=== STUDENT LOGIN ===" << endl;
+        cout << "Enter Student ID: ";
+        while (!(cin >> id)) {
+            cout << "Invalid ID! Please enter a number: ";
+            cin.clear();
+            cin.ignore(1000, '\n');
+        }
         cin.ignore(1000, '\n');
-    }
 
-    cout << "Enter ID: ";
-    while (!(cin >> id)) {
-        cout << "Invalid ID! Please enter a number: ";
-        cin.clear();
-        cin.ignore(1000, '\n');
-    }
-    cin.ignore(1000, '\n');
-    cout << "Enter Password: ";
-    getline(cin, password);
+        cout << "Enter Password: ";
+        getline(cin, password);
 
-    if (role == 1) {
-        int studentIndex = findStudent(id, password);
-        if (studentIndex != -1) {
-            cout << "\nStudent Login Successful " << endl;
-            cout << "Welcome, " << students[studentIndex].name << " (ID: "
-                << students[studentIndex].studentID << ")" << endl;
-            cout << "Level: " << students[studentIndex].level << endl;
-            return true;
+        int index = findStudent(id, password);
+
+        if (index != -1) {
+            cout << "\nLogin Successful!" << endl;
+            cout << "Welcome, " << students[index].name
+                << " (ID: " << students[index].studentID << ")" << endl;
+            cout << "Level: " << students[index].level << endl;
+
+            system("pause");
+            system("cls");
+
+            return index;
         }
         else {
             cout << "\nInvalid Student ID or Password!" << endl;
@@ -45,18 +43,13 @@ bool login() {
                 cout << "\nToo many failed attempts. Try again later..." << endl;
                 system("pause");
                 system("cls");
-    }
-    else if (role == 2) {
-        if (adminIndex != -1) {
-            cout << "\nAdmin Login Successful" << endl;
-            cout << "Welcome, " << admins[adminIndex].name << " (ID: "
-                << admins[adminIndex].adminID << ")" << endl;
-            return true;
+            }
         }
     }
     return -1;
 }
 
+// =================== Sign Up Function ==========================
 void studentSignUp() {
     if (studentCount >= MAX_STUDENTS) {
         cout << "Sorry, no more students can be added!" << endl;
@@ -64,24 +57,31 @@ void studentSignUp() {
     }
 
     Student s;
+    bool idExist;
 
-    // ID (numbers only)
-    cout << "Enter Student ID: ";
-    while (!(cin >> s.studentID)) {
-        cin.clear();
-        cin.ignore(1000, '\n');
-        cout << "Invalid! ID must be numbers only. Try again: ";
-    }
-
-    for (int i = 0; i < studentCount; i++) {
-        if (students[i].studentID == s.studentID) {
-            cout << "ID already exists!" << endl;
-            return;
+    do {
+        idExist = false;
+        // ID (numbers only)
+        cout << "Enter Student ID(or enter 0 to go back): ";
+        while (!(cin >> s.studentID)) {
+            cin.clear();
+            cin.ignore(1000, '\n');
+            cout << "Invalid! ID must be numbers only. Try again: ";
         }
-    }
 
-    // Name (no numbers allowed)
-    cin.ignore();
+        if (s.studentID == 0) return;
+
+        for (int i = 0; i < studentCount; i++) {
+            if (students[i].studentID == s.studentID) {
+                cout << "ID already exists! Please try again." << endl;
+                idExist = true;
+                break;
+            }
+        }
+    } while (idExist);
+
+        // Name (no numbers allowed)
+    cin.ignore(1000,'\n');
     cout << "Enter Name: ";
     getline(cin, s.name);
     while (true) {
@@ -99,7 +99,7 @@ void studentSignUp() {
 
     // Password (anything allowed)
     cout << "Enter Password: ";
-    cin >> s.password;
+    getline(cin, s.password);
 
     // Level (1 to 4 only)
     cout << "Enter Level (1-4): ";
@@ -119,120 +119,122 @@ void studentSignUp() {
     cout << "Sign Up Successful!" << endl;
 }
 
+// ===================== Available Courses Function ===========================
 void viewAvailableCourses() {
-    cout << "\n--- Available Courses List ---\n";
+    cout << "========== VIEW AVAILABLE COURSES ============" << endl;
 
-    for (int i = 0; i < courseCount; i++) {
-        if (courses[i].currentEnrolled < courses[i].maxCapacity) {
-            cout << " Course ID   : " << courses[i].courseID << endl;
-            cout << " Course Name : " << courses[i].courseName << endl;
-            cout << " Instructor  : " << courses[i].instructorName << endl;
-            cout << "    Day      : " << courses[i].day << endl;
-            cout << "    Time     : " << courses[i].time << endl;
-            cout << " Enrollment  : " << courses[i].currentEnrolled << "/" << courses[i].maxCapacity << endl;
-            cout << "------------------------------------" << endl;
+    bool found = false;
+
+    for (int i = 0; i < courseCount; i++)
+    {
+
+        if (courses[i].currentEnrolled < courses[i].maxCapacity)
+        {
+
+            cout << "Course ID: " << courses[i].courseID << endl;
+            cout << "Course Name: " << courses[i].courseName << endl;
+            cout << "Instructor: " << courses[i].instructorName << endl;
+            cout << "Schedule: " << courses[i].day << " at " << courses[i].time << endl;
+            cout << "Available Seats: " << (courses[i].maxCapacity - courses[i].currentEnrolled) << endl;
+            cout << "----------------------------------------" << endl;
+
+            found = true;
         }
+    }
+
+    if (!found)
+    {
+        cout << "No courses are currently available for registration." << endl;
     }
 }
 
-/*void registerCourses(int studentIndx) {
-    int id;
-    cout << "Enter the course ID: ";
-    cin >> id;
-    int result = findCourse(id);
-    while (result == -1) {
-        cout << "There is no an available courses for this id.Please try again." << endl;
-        cout << "Enter Course ID: ";
-        cin >> id;
-        result = findCourse(id);
-    }
-}*/
-void registerCourse(int studenIndex)
+// ===================== Register Courses Function =======================
+void registerCourse(int studentIndex) {
+    // Check if the student already has 10 courses.
+    if (students[studentIndex].numCourses >= 10) {
 
-{
-    if (students[studentIndex].numCourses >= 10)
-
-    {
-
-        cout << "student reached max limit" << endl;
-
+        cout << "You reached the maximum limit" << endl;
         return;
-
     }
+
     int id;
-    cout << "Enter course id: ";
-    cin >> id;
-
-
-    if (studentIndex == -1)
-
-    {
-
-        cout << "student not found" << endl;
-
-        return;
-
+    cout << "Enter Course ID to register: ";
+    // ID (only number).
+    while (!(cin >> id)) {
+        cin.clear();
+        cin.ignore(1000, '\n');
+        cout << "Invalid ID!Enter numbers only:";
     }
 
     int courseIndex = findCourse(id);
+    // Ckeck if the course ID is exists in the system.
+    if (courseIndex == -1) {
 
-
-
-  
-
-    if (courseIndex == -1)
-
-    {
-
-        cout << "course not found" << endl;
-
+        cout << "course not found in the system" << endl;
         return;
-
     }
 
+    // Check if there are available spaces in the course.
+    if (courses[courseIndex].currentEnrolled >= courses[courseIndex].maxCapacity) {
 
-
-    if (courses[courseIndex].currentEnrolled >= courses[courseIndex].maxCapacity)
-
-    {
-
-        cout << "course is full" << endl;
-
+        cout << "This course is full" << endl;
         return;
-
     }
 
+    // Check if the student is already registered in this course.
+    for (int i = 0; i < students[studentIndex].numCourses; i++) {
+        if (students[studentIndex].registeredCourses[i] == id) {
+            cout << "You are already registered in this course!" << endl;
+            return;
+        }
+    }
 
+    // Add the course to the student's list.
+    students[studentIndex].registeredCourses[students[studentIndex].numCourses] = id;
 
-
-
-    students[studentIndex].registerCourses[students[studentIndex].numCourses] = courseID;
-
+    // Update counters for both student and course.
     students[studentIndex].numCourses++;
-
     courses[courseIndex].currentEnrolled++;
 
-
-
-    cout << "registration successful" << endl;
-
+    cout << "Course Registered successfully" << endl;
 }
 
-//   ==========student drop course=========   //
-void dropCourse() {  // ali [101, 102, 103, 104]
-
+// =================== Drop Courses Function =================
+void dropcourses(int sIndex) {
     int id;
-    cout << "Enter Course ID to delete: ";
+    cout << "Enter ID to drop: "; 
     cin >> id;
 
-    int index = findCourse(id);
+    int found = -1;
+    for (int i = 0; i < students[sIndex].numCourses; i++) {
 
-    if (index == -1) {
-        cout << "Error: Course ID not found!\n";
-        return;
+        if (students[sIndex].registeredCourses[i] == id) {
+            
+            found = i; break; 
+        }
+    }
 
+    if (found != -1) {
 
+        for (int i = found; i < students[sIndex].numCourses - 1; i++) {
+            students[sIndex].registeredCourses[i] = students[sIndex].registeredCourses[i + 1];
+        }
+    
+        students[sIndex].numCourses--;
+        int cIdx = findCourse(id);
+        if (cIdx != -1) {
+
+            courses[cIdx].currentEnrolled--;
+        }
+
+        cout << "Course dropped successfullly." << endl;
+    }
+    else {
+        cout << "Not found in your list." << endl;
+    }
 }
+
+// ===================== View My Courses =========================
 void viewMyCourses(int studentIndex) {
     if (students[studentIndex].numCourses == 0) {
         cout << "No registered courses yet.\n";
