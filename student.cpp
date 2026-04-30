@@ -203,7 +203,11 @@ void registerCourse(int studentIndex) {
 void dropcourses(int sIndex) {
     int id;
     cout << "Enter ID to drop: "; 
-    cin >> id;
+    while (!(cin >> id)) {
+        cin.clear();
+        cin.ignore(1000, '\n');
+        cout << "Invalid ID!Enter numbers only:";
+    }
 
     int found = -1;
     for (int i = 0; i < students[sIndex].numCourses; i++) {
@@ -255,6 +259,34 @@ void viewMyCourses(int studentIndex) {
             cout << "Day: " << courses[c].day << endl;
             cout << "Time: " << courses[c].time << endl;
             cout << "-----------------------------\n";
+        }
+    }
+    system("pause");
+}
+
+// ====================== Logout Function ============================
+bool studentLogout() {
+    char confirm;
+    while (true) {
+        cout << "Are you sure you want to logout?(y/n): ";
+        cin >> confirm;
+
+        if (confirm == 'y' || confirm == 'Y') {
+            cout << "Logging out successfully... Have a nice day!" << endl;
+            system("pause");
+            system("cls");
+            return true;
+        }
+
+        else if (confirm == 'n' || confirm == 'N') {
+            cout << "Returning to student menu" << endl;
+            return false;
+        }
+
+        else {
+            cout << "Invalid input! Please enter 'y' for Yes or 'n' for No." << endl;
+            cin.clear();
+            cin.ignore(1000, '\n');
         }
     }
 }
