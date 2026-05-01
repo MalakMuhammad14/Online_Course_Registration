@@ -200,7 +200,7 @@ void registerCourse(int studentIndex) {
 }
 
 // =================== Drop Courses Function =================
-void dropcourses(int sIndex) {
+void dropCourse(int sIndex) {
     int id;
     cout << "Enter ID to drop: "; 
     while (!(cin >> id)) {

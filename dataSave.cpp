@@ -30,6 +30,29 @@ int findCourse(int id) {
     return -1;
 }
 
+// Used by editCourse only - removes spaces from name for flexible comparison
+string normalizeName(string s) {
+    string result = "";
+    for (int i = 0; i < s.length(); i++)
+        if (s[i] != ' ')
+            result += s[i];
+    return result;
+}
+
+// Used by editCourse only - checks if instructor name has letters only
+bool isValidInstructor(string name) {
+    string normalized = normalizeName(name);
+
+    if (normalized.length() == 0)
+        return false;
+
+    for (int i = 0; i < normalized.length(); i++)
+        if (!isalpha(normalized[i]) && normalized[i] != '.')
+            return false;
+
+    return true;
+}
+
 // =============== INITIAL DATA (DEFAULT) =================
 void initData() {
     students[0] = { 1, "Ali", "123", 1, {0}, 0 };

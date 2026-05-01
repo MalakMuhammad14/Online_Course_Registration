@@ -2,6 +2,7 @@
 #include "globals.h"
 
 int main() {
+    // loadAllData();
     initData();
     showWelcome();
 
@@ -13,39 +14,18 @@ int main() {
 
         switch (choice) {
         case 1:
-            studentMenu();
-            int studentChoice;
-            cin >> studentChoice;
-            system("cls");
-
-            switch (studentChoice) {
-            case 1: {
-                int studentIndex = studentLogin();
-                int subChoice;
-                cin >> subChoice;
-
-                switch (subChoice) {
-                case 1:
-                    viewAvailableCourses();
-                    system("pause");
-                }
-                break;
-            }
-            case 2:
-                studentSignUp();
-                break;
-            case 0:
-                break;
-            }
+            studentPortal();
             break;
         case 2:
-            cout << "//Log in admin";
+            adminPortal();
             break;
         case 0:
-            cout << "Goodbye!";
+            // saveAllData();
+            cout << "Goodbye!"<< endl;
             break;
         default :
-            cout << "Invalid choice" << endl;
+            cout << "Invalid choice!" << endl;
         }
     } while (choice != 0);
+    return 0;
 }

@@ -1,5 +1,6 @@
 #include "globals.h"
 
+// ====================== Admin Login Function ============================
 int adminLogin() {
     const int MAX_ATTEMPTS = 3;
     int attempts = 0;
@@ -47,7 +48,7 @@ int adminLogin() {
 }
 
 //  ============== Add Course Function =================
-/*void addCourse() {
+void addCourse() {
     // Check if there is still space in the courses array before adding.
     if (courseCount < MAX_COURSES) {
         int id;
@@ -57,8 +58,9 @@ int adminLogin() {
         int result = findCourse(id);
         while (result != -1) {
             cout << "This id is already exist to another course.Please try again." << endl;
-            cout << "Enter Course ID: ";
+            cout << "Enter Course ID(or enter 0 to go back): ";
             cin >> id;
+            if (id == 0) return;
             result = findCourse(id);
         }
         courses[courseCount].courseID = id;
@@ -108,29 +110,7 @@ int adminLogin() {
     }
 }
 
-// Used by editCourse only - removes spaces from name for flexible comparison
-string normalizeName(string s) {
-    string result = "";
-    for (int i = 0; i < s.length(); i++)
-        if (s[i] != ' ')
-            result += s[i];
-    return result;
-}
-
-// Used by editCourse only - checks if instructor name has letters only
-bool isValidInstructor(string name) {
-    string normalized = normalizeName(name);
-
-    if (normalized.length() == 0)
-        return false;
-
-    for (int i = 0; i < normalized.length(); i++)
-        if (!isalpha(normalized[i]) && normalized[i] != '.')
-            return false;
-
-    return true;
-}
-
+// ======================= Edit Course Function ==========================
 void editCourse() {
     int id;
     cout << "Enter Course ID to edit: ";
@@ -188,6 +168,7 @@ void editCourse() {
     cout << "Course updated successfully!" << endl;
 }
 
+// ============================ Delete Course Function ======================
 void deleteCourse() {
     int id;
     cout << "Enter course id to delete: ";
@@ -200,7 +181,8 @@ void deleteCourse() {
         return;
     }
 
-    if (index != 1 && courses[index].currentEnrolled == 0) {
+    // Check if there are student in this course
+    if (courses[index].currentEnrolled == 0) {
 
         // shift all courses left
         for (int i = index; i < courseCount - 1; i++) {
@@ -212,11 +194,13 @@ void deleteCourse() {
 
         cout << "Course deleted successfully.\n";
     }
+
     else {
-        cout << "deleted failed";
+        cout << "deleted failed due to exist students in this course.";
     }
 }
 
+// ==================== View All Students =======================
 void viewAllStudents() {
    
     if (studentCount == 0)
@@ -227,13 +211,16 @@ void viewAllStudents() {
 
     for (int i = 0; i < studentCount; i++)
     {
-        cout << "Student ID: " << students[i].studentID << endl;
-        cout << "Student Name: " << students[i].name << endl;
+        cout << i + 1 << ". ";
+        cout << "Name: " << students[i].name << endl;
+        cout << "ID: " << students[i].studentID << endl;
+        cout << "Level: " << students[i].level << endl;
         cout << "Number of Courses: " << students[i].numCourses << endl;
-        cout << "------------------------" << endl;
+        cout << "---------------------------------" << endl;
     }
 }
 
+// ================== Logout Admin Function ======================
 void logoutAdmin() {
-
-}*/
+    cout << "You have logged out successfully." << endl;
+}
