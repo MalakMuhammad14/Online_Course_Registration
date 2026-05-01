@@ -63,9 +63,7 @@ int adminLogin() {
         }
         courses[courseCount].courseID = id;
 
-        // Clear the buffer before reading strings to use getline() correctly.
         cin.ignore();
-        // Input course and instructor names.
         string courseName;
         cout << "Enter Course Name: " << endl;
         getline(cin, courseName);
@@ -76,7 +74,6 @@ int adminLogin() {
         getline(cin, instructorName);
         courses[courseCount].instructorName = instructorName;
 
-        // Input credit hours and capacity.
         int creditHours;
         cout << "Enter Credit Hours: " << endl;
         cin >> creditHours;
@@ -87,7 +84,6 @@ int adminLogin() {
         cin >> maxCapacity;
         courses[courseCount].maxCapacity = maxCapacity;
 
-        // Clear buffer again and input schedule details.
         cin.ignore();
         string day;
         cout << "Enter scheduled day(ex. Monday): " << endl;
@@ -102,7 +98,6 @@ int adminLogin() {
         // Initialize enrollment count to zero.
         courses[courseCount].currentEnrolled = 0;
 
-        // Update total courses.
         courseCount += 1;
 
         cout << "Course " << courseName << " added successfully!" << endl;
