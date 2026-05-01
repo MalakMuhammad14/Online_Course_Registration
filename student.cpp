@@ -203,11 +203,7 @@ void registerCourse(int studentIndex) {
 void dropCourse(int sIndex) {
     int id;
     cout << "Enter ID to drop: "; 
-    while (!(cin >> id)) {
-        cin.clear();
-        cin.ignore(1000, '\n');
-        cout << "Invalid ID!Enter numbers only:";
-    }
+    cin >> id;
 
     int found = -1;
     for (int i = 0; i < students[sIndex].numCourses; i++) {
