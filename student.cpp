@@ -266,6 +266,7 @@ bool studentLogout() {
     while (true) {
         cout << "Are you sure you want to logout?(y/n): ";
         cin >> confirm;
+        cin.ignore(1000, '\n');
 
         if (confirm == 'y' || confirm == 'Y') {
             cout << "Logging out successfully... Have a nice day!" << endl;

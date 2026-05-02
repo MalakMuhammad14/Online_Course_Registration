@@ -1,0 +1,4 @@
+3
+101|Math|Dr.Ahmed|3|30|0|Sun|10AM
+102|CS|Dr.Samy|3|25|0|Mon|12PM
+103|English|Dr.Emad|2|35|0|Tue|2PM

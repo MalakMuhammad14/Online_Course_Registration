@@ -1,4 +1,5 @@
 #include "globals.h"
+#include <fstream>
 
 Student students[MAX_STUDENTS];
 Course courses[MAX_COURSES];
@@ -66,4 +67,90 @@ void initData() {
 
     admins[0] = { 1, "Admin", "admin123" };
     adminCount = 1;
+}
+
+void saveAllData() {
+
+    ofstream sFile("students.txt");
+    sFile << studentCount << endl;
+    for (int i = 0; i < studentCount; i++) {
+        sFile << students[i].studentID << "|" << students[i].name << "|" << students[i].password
+            << "|" << students[i].level << "|" << students[i].numCourses;
+        for (int j = 0; j < students[i].numCourses; j++) sFile << "|" << students[i].registeredCourses[j];
+        sFile << endl;
+    }
+    sFile.close();
+
+
+    ofstream cFile("courses.txt");
+    cFile << courseCount << endl;
+    for (int i = 0; i < courseCount; i++) {
+        cFile << courses[i].courseID << "|" << courses[i].courseName << "|" << courses[i].instructorName
+            << "|" << courses[i].creditHours << "|" << courses[i].maxCapacity
+            << "|" << courses[i].currentEnrolled << "|" << courses[i].day << "|" << courses[i].time << endl;
+    }
+    cFile.close();
+
+
+    ofstream aFile("admins.txt");
+    aFile << adminCount << endl;
+    for (int i = 0; i < adminCount; i++) {
+        aFile << admins[i].adminID << "|" << admins[i].name << "|" << admins[i].password << endl;
+    }
+    aFile.close();
+}
+
+
+void loadAllData() {
+    ifstream sFile("students.txt");
+    if (sFile.is_open()) {
+        sFile >> studentCount;
+        for (int i = 0; i < studentCount; i++) {
+            sFile >> students[i].studentID; 
+            sFile.ignore();
+            getline(sFile, students[i].name, '|');
+            getline(sFile, students[i].password, '|');
+            sFile >> students[i].level;
+            sFile.ignore();
+            sFile >> students[i].numCourses;
+
+            for (int j = 0; j < students[i].numCourses; j++) {
+                sFile.ignore();
+                sFile >> students[i].registeredCourses[j]; 
+            }
+        }
+        sFile.close();
+    }
+
+    ifstream cFile("courses.txt");
+    if (cFile.is_open()) {
+        cFile >> courseCount;
+        for (int i = 0; i < courseCount; i++) {
+            cFile >> courses[i].courseID;
+            cFile.ignore();
+            getline(cFile, courses[i].courseName, '|');
+            getline(cFile, courses[i].instructorName, '|');
+            cFile >> courses[i].creditHours;
+            cFile.ignore();
+            cFile >> courses[i].maxCapacity;
+            cFile.ignore();
+            cFile >> courses[i].currentEnrolled;
+            cFile.ignore();
+            getline(cFile, courses[i].day, '|');
+            getline(cFile, courses[i].time);
+        }
+        cFile.close();
+    }
+
+    ifstream aFile("admins.txt");
+    if (aFile.is_open()) {
+        aFile >> adminCount;
+        for (int i = 0; i < adminCount; i++) {
+            aFile >> admins[i].adminID;
+            aFile.ignore();
+            getline(aFile, admins[i].name, '|');
+            getline(aFile, admins[i].password);
+        }
+        aFile.close();
+    }
 }

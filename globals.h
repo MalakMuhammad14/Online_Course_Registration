@@ -70,3 +70,5 @@ void editCourse();
 void deleteCourse();
 void viewAllStudents();
 void logoutAdmin();
+void saveAllData();
+void loadAllData();

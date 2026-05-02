@@ -46,18 +46,19 @@ void studentPortal() {
     system("cls");
 
     switch (studentChoice) {
-    case 1:
+    case 1: {
         int studentIndex = studentLogin();
 
         if (studentIndex != -1) {
             int subChoice;
             do {
                 system("cls");
-                studentFunctionMenu(); 
+                studentFunctionMenu();
                 cin >> subChoice;
 
                 switch (subChoice) {
                 case 1:
+                    system("cls");
                     viewAvailableCourses();
                     system("pause");
                     break;
@@ -86,6 +87,7 @@ void studentPortal() {
             } while (subChoice != 5);
         }
         break;
+    }
     case 2:
         studentSignUp();
         break;

@@ -2,8 +2,8 @@
 #include "globals.h"
 
 int main() {
-    // loadAllData();
-    initData();
+    loadAllData();
+    //initData();
     showWelcome();
 
     int choice;
@@ -20,7 +20,7 @@ int main() {
             adminPortal();
             break;
         case 0:
-            // saveAllData();
+            saveAllData();
             cout << "Goodbye!"<< endl;
             break;
         default :
