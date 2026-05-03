@@ -72,3 +72,4 @@ void viewAllStudents();
 void logoutAdmin();
 void saveAllData();
 void loadAllData();
+int isNumber();

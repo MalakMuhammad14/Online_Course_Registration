@@ -9,24 +9,24 @@ int adminLogin() {
         int id;
         string password;
 
-        cout << "\n=== ADMIN LOGIN ===" << endl;
-        cout << "Enter Admin ID: ";
+        cout << "\n================ ADMIN LOGIN ===============\n" << endl;
+        cout << "\tEnter Admin ID: ";
         while (!(cin >> id)) {
-            cout << "Invalid ID! Please enter a number: ";
+            cout << "\n\tInvalid ID! Please enter a number: ";
             cin.clear();
             cin.ignore(1000, '\n');
         }
 
         cin.ignore(1000, '\n');
 
-        cout << "Enter Password: ";
+        cout << "\n\tEnter Password: ";
         getline(cin, password);
 
         int index = findAdmin(id, password);
 
         if (index != -1) {
-            cout << "\nLogin Successful!" << endl;
-            cout << "Welcome, " << admins[index].name
+            cout << "\n\tLogin Successful!";
+            cout << "\tWelcome " << admins[index].name
                 << " (ID: " << admins[index].adminID << ")" << endl;
 
             system("pause");
@@ -35,15 +35,17 @@ int adminLogin() {
         }
 
         else {
-            cout << "\nInvalid Admin ID or Password!" << endl;
+            cout << "\n\tInvalid Admin ID or Password!" << endl;
             attempts++;
             if (attempts < MAX_ATTEMPTS)
-                cout << "Attempts remaining: " << (MAX_ATTEMPTS - attempts) << endl;
-            else
-                cout << "\nToo many failed attempts. Try again later..." << endl;
+                cout << "\n\tAttempts remaining: " << (MAX_ATTEMPTS - attempts) << endl;
+            else {
+                cout << "\n\tToo many failed attempts. Try again later..." << endl;
+                system("pause");
+                system("cls");
+            }
         }
     }
-
     return -1;
 }
 
@@ -52,48 +54,91 @@ void addCourse() {
     // Check if there is still space in the courses array before adding.
     if (courseCount < MAX_COURSES) {
         int id;
-        cout << "Enter Course ID: " << endl;
-        cin >> id;
+        cout << "\n\tEnter Course ID: ";
+        id = isNumber();
         // Check if the ID already exist.
         int result = findCourse(id);
         while (result != -1) {
-            cout << "This id is already exist to another course.Please try again." << endl;
-            cout << "Enter Course ID(or enter 0 to go back): ";
-            cin >> id;
+            cout << "\n\tThis id is already exist to another course.Please try again." << endl;
+            cout << "\n\tEnter Course ID(or enter 0 to go back): ";
+            id = isNumber();
             if (id == 0) return;
             result = findCourse(id);
         }
         courses[courseCount].courseID = id;
 
-        cin.ignore();
         string courseName;
-        cout << "Enter Course Name: " << endl;
+        cout << "\n\tEnter Course Name: ";
         getline(cin, courseName);
+        while (!isValidInstructor(courseName)) {
+            cout << "\n\tInvalid! Name must contain letters only. Try again: ";
+            getline(cin, courseName);
+        }
         courses[courseCount].courseName = courseName;
 
         string instructorName;
-        cout << "Enter Instructor Name: " << endl;
+        cout << "\n\tEnter Instructor Name: ";
         getline(cin, instructorName);
+        while (!isValidInstructor(instructorName)) {
+            cout << "\n\tInvalid! Name must contain letters only. Try again: ";
+            getline(cin, instructorName);
+        }
         courses[courseCount].instructorName = instructorName;
 
         int creditHours;
-        cout << "Enter Credit Hours: " << endl;
-        cin >> creditHours;
+        cout << "\n\tEnter Credit Hours: ";
+        creditHours = isNumber();
         courses[courseCount].creditHours = creditHours;
 
         int maxCapacity;
-        cout << "Enter Maximum Capacity: " << endl;
-        cin >> maxCapacity;
+        cout << "\n\tEnter Maximum Capacity: ";
+        maxCapacity = isNumber();
         courses[courseCount].maxCapacity = maxCapacity;
 
-        cin.ignore();
         string day;
-        cout << "Enter scheduled day(ex. Monday): " << endl;
-        getline(cin, day);
+            cout << "\n\tChoose scheduled day:-\n\t------------------------------" << endl;
+            cout << "\t1. Saturday          2. Sunday" << endl;
+            cout << "\t3. Monday            4. Tuesday" << endl;
+            cout << "\t5. Wednesday         6. Thursday" << endl;
+            cout << "\t6. Friday\n\t------------------------" << endl;
+            cout << "\tEnter your choice: ";
+
+            while (true) {
+            int choice;
+            choice = isNumber();
+            switch (choice) {
+            case 1:
+                day = "Saturday";
+                break;
+            case 2:
+                day = "Sunday";
+                break;
+            case 3:
+                day = "Monday";
+                break;
+            case 4:
+                day = "Tuesday";
+                break;
+            case 5:
+                day = "Wednesday";
+                break;
+            case 6:
+                day = "Thursday";
+                break;
+            case 7:
+                day = "Friday";
+                break;
+            default:
+                cout << "\n\tInvalid choice! Please select(1-7)." << endl;
+                cout << "\n\tEnter your choice: ";
+                continue;
+            }
+            break;
+        }
         courses[courseCount].day = day;
 
         string time;
-        cout << "Enter scheduled time(ex. 10:00 AM): " << endl;
+        cout << "\n\tEnter scheduled time(ex. 10:00 AM): ";
         getline(cin, time);
         courses[courseCount].time = time;
 
@@ -102,11 +147,11 @@ void addCourse() {
 
         courseCount += 1;
 
-        cout << "Course " << courseName << " added successfully!" << endl;
+        cout << "\n\tCourse " << courseName << " added successfully!" << endl;
     }
     else {
         // Error message if the array is full.
-        cout << "Unable to add new course. System capacity is full." << endl;
+        cout << "\n\tUnable to add new course. System capacity is full." << endl;
     }
 }
 

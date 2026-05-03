@@ -6,28 +6,29 @@ int studentLogin() {
     int attempts = 0;
 
     while (attempts < MAX_ATTEMPTS) {
+        system("cls");
         int id;
         string password;
 
-        cout << "\n=== STUDENT LOGIN ===" << endl;
-        cout << "Enter Student ID: ";
+        cout << "\n============ STUDENT LOGIN ==============\n" << endl;
+        cout << "\tEnter Student ID: ";
         while (!(cin >> id)) {
-            cout << "Invalid ID! Please enter a number: ";
+            cout << "\n\tInvalid ID! Please enter a number: ";
             cin.clear();
             cin.ignore(1000, '\n');
         }
         cin.ignore(1000, '\n');
 
-        cout << "Enter Password: ";
+        cout << "\n\tEnter Password: ";
         getline(cin, password);
 
         int index = findStudent(id, password);
 
         if (index != -1) {
-            cout << "\nLogin Successful!" << endl;
-            cout << "Welcome, " << students[index].name
+            cout << "\n\tLogin Successful!";
+            cout << "\tWelcome " << students[index].name
                 << " (ID: " << students[index].studentID << ")" << endl;
-            cout << "Level: " << students[index].level << endl;
+            cout << "\t\t\t\t\tLevel: " << students[index].level << endl;
 
             system("pause");
             system("cls");
@@ -35,12 +36,14 @@ int studentLogin() {
             return index;
         }
         else {
-            cout << "\nInvalid Student ID or Password!" << endl;
+            cout << "\n\tInvalid Student ID or Password!" << endl;
             attempts++;
-            if (attempts < MAX_ATTEMPTS)
-                cout << "Attempts remaining: " << (MAX_ATTEMPTS - attempts) << endl;
+            if (attempts < MAX_ATTEMPTS) {
+                cout << "\n\tAttempts remaining: " << (MAX_ATTEMPTS - attempts) << endl;
+                system("pause");
+            }
             else {
-                cout << "\nToo many failed attempts. Try again later..." << endl;
+                cout << "\n\tToo many failed attempts. Try again later..." << endl;
                 system("pause");
                 system("cls");
             }
@@ -57,32 +60,25 @@ void studentSignUp() {
     }
 
     Student s;
-    bool idExist;
 
-    do {
-        idExist = false;
-        // ID (numbers only)
-        cout << "Enter Student ID(or enter 0 to go back): ";
-        while (!(cin >> s.studentID)) {
-            cin.clear();
-            cin.ignore(1000, '\n');
-            cout << "Invalid! ID must be numbers only. Try again: ";
+    // ID (numbers only)
+    cout << "\n\tEnter Student ID: ";
+    while (!(cin >> s.studentID)) {
+        cin.clear();
+        cin.ignore(1000, '\n');
+        cout << "\n\tInvalid! ID must be numbers only. Try again: ";
+    }
+
+    for (int i = 0; i < studentCount; i++) {
+        if (students[i].studentID == s.studentID) {
+            cout << "\n\tID already exists!" << endl;
+            return;
         }
+    }
 
-        if (s.studentID == 0) return;
-
-        for (int i = 0; i < studentCount; i++) {
-            if (students[i].studentID == s.studentID) {
-                cout << "ID already exists! Please try again." << endl;
-                idExist = true;
-                break;
-            }
-        }
-    } while (idExist);
-
-        // Name (no numbers allowed)
-    cin.ignore(1000,'\n');
-    cout << "Enter Name: ";
+    // Name (no numbers allowed)
+    cin.ignore();
+    cout << "\n\tEnter Name: ";
     getline(cin, s.name);
     while (true) {
         bool validName = true;
@@ -93,20 +89,20 @@ void studentSignUp() {
             }
         }
         if (validName) break;
-        cout << "Invalid! Name must be letters only. Try again: ";
+        cout << "\n\tInvalid! Name must be letters only. Try again: ";
         getline(cin, s.name);
     }
 
     // Password (anything allowed)
-    cout << "Enter Password: ";
+    cout << "\n\tEnter Password: ";
     getline(cin, s.password);
 
     // Level (1 to 4 only)
-    cout << "Enter Level (1-4): ";
+    cout << "\n\tEnter Level (1-4): ";
     while (!(cin >> s.level) || s.level < 1 || s.level > 4) {
         cin.clear();
         cin.ignore(1000, '\n');
-        cout << "Invalid! Level must be between 1 and 4. Try again: ";
+        cout << "\n\tInvalid! Level must be between 1 and 4. Try again: ";
     }
 
     s.numCourses = 0;
@@ -116,12 +112,12 @@ void studentSignUp() {
     students[studentCount] = s;
     studentCount++;
 
-    cout << "Sign Up Successful!" << endl;
+    cout << "\n\tSign Up Successful!" << endl;
 }
 
 // ===================== Available Courses Function ===========================
 void viewAvailableCourses() {
-    cout << "========== VIEW AVAILABLE COURSES ============" << endl;
+    cout << "\n========== VIEW AVAILABLE COURSES ============" << endl;
 
     bool found = false;
 
@@ -131,11 +127,11 @@ void viewAvailableCourses() {
         if (courses[i].currentEnrolled < courses[i].maxCapacity)
         {
 
-            cout << "Course ID: " << courses[i].courseID << endl;
-            cout << "Course Name: " << courses[i].courseName << endl;
-            cout << "Instructor: " << courses[i].instructorName << endl;
-            cout << "Schedule: " << courses[i].day << " at " << courses[i].time << endl;
-            cout << "Available Seats: " << (courses[i].maxCapacity - courses[i].currentEnrolled) << endl;
+            cout << "\tCourse ID      : " << courses[i].courseID << endl;
+            cout << "\tCourse Name    : " << courses[i].courseName << endl;
+            cout << "\tInstructor     : " << courses[i].instructorName << endl;
+            cout << "\tSchedule       : " << courses[i].day << " at " << courses[i].time << endl;
+            cout << "\tAvailable Seats: " << (courses[i].maxCapacity - courses[i].currentEnrolled) << endl;
             cout << "----------------------------------------" << endl;
 
             found = true;
@@ -153,38 +149,38 @@ void registerCourse(int studentIndex) {
     // Check if the student already has 10 courses.
     if (students[studentIndex].numCourses >= 10) {
 
-        cout << "You reached the maximum limit" << endl;
+        cout << "\n\tYou reached the maximum limit" << endl;
         return;
     }
 
     int id;
-    cout << "Enter Course ID to register: ";
+    cout << "\n\tEnter Course ID to register: ";
     // ID (only number).
     while (!(cin >> id)) {
         cin.clear();
         cin.ignore(1000, '\n');
-        cout << "Invalid ID!Enter numbers only:";
+        cout << "\n\tInvalid ID!Enter numbers only:";
     }
 
     int courseIndex = findCourse(id);
     // Ckeck if the course ID is exists in the system.
     if (courseIndex == -1) {
 
-        cout << "course not found in the system" << endl;
+        cout << "\n\tcourse not found in the system" << endl;
         return;
     }
 
     // Check if there are available spaces in the course.
     if (courses[courseIndex].currentEnrolled >= courses[courseIndex].maxCapacity) {
 
-        cout << "This course is full" << endl;
+        cout << "\n\tThis course is full" << endl;
         return;
     }
 
     // Check if the student is already registered in this course.
     for (int i = 0; i < students[studentIndex].numCourses; i++) {
         if (students[studentIndex].registeredCourses[i] == id) {
-            cout << "You are already registered in this course!" << endl;
+            cout << "\n\tYou are already registered in this course!" << endl;
             return;
         }
     }
@@ -196,13 +192,13 @@ void registerCourse(int studentIndex) {
     students[studentIndex].numCourses++;
     courses[courseIndex].currentEnrolled++;
 
-    cout << "Course Registered successfully" << endl;
+    cout << "\n\tCourse Registered successfully" << endl;
 }
 
 // =================== Drop Courses Function =================
 void dropCourse(int sIndex) {
     int id;
-    cout << "Enter ID to drop: "; 
+    cout << "\n\tEnter ID to drop: "; 
     cin >> id;
 
     int found = -1;
@@ -227,34 +223,34 @@ void dropCourse(int sIndex) {
             courses[cIdx].currentEnrolled--;
         }
 
-        cout << "Course dropped successfullly." << endl;
+        cout << "\n\tCourse dropped successfullly." << endl;
     }
     else {
-        cout << "Not found in your list." << endl;
+        cout << "\n\tNot found in your list." << endl;
     }
 }
 
 // ===================== View My Courses =========================
 void viewMyCourses(int studentIndex) {
     if (students[studentIndex].numCourses == 0) {
-        cout << "No registered courses yet.\n";
+        cout << "\n\tNo registered courses yet.\n";
         return;
     }
 
-    cout << "\n=== My Registered Courses ===\n";
+    cout << "\n================ My Registered Courses ==================\n";
 
     for (int i = 0; i < students[studentIndex].numCourses; i++) {
         int courseID = students[studentIndex].registeredCourses[i];
         int c = findCourse(courseID);
 
         if (c != -1) {
-            cout << "Course ID: " << courses[c].courseID << endl;
-            cout << "Course Name: " << courses[c].courseName << endl;
-            cout << "Instructor: " << courses[c].instructorName << endl;
-            cout << "Credit Hours: " << courses[c].creditHours << endl;
-            cout << "Day: " << courses[c].day << endl;
-            cout << "Time: " << courses[c].time << endl;
-            cout << "-----------------------------\n";
+            cout << "\tCourse ID   : " << courses[c].courseID << endl;
+            cout << "\tCourse Name : " << courses[c].courseName << endl;
+            cout << "\tInstructor  : " << courses[c].instructorName << endl;
+            cout << "\tCredit Hours: " << courses[c].creditHours << endl;
+            cout << "\tDay         : " << courses[c].day << endl;
+            cout << "\tTime        : " << courses[c].time << endl;
+            cout << "--------------------------------------\n";
         }
     }
     system("pause");
@@ -264,26 +260,23 @@ void viewMyCourses(int studentIndex) {
 bool studentLogout() {
     char confirm;
     while (true) {
-        cout << "Are you sure you want to logout?(y/n): ";
+        cout << "\n\tAre you sure you want to logout?(y/n): ";
         cin >> confirm;
-        cin.ignore(1000, '\n');
+        cin.ignore(100, '\n');
 
         if (confirm == 'y' || confirm == 'Y') {
-            cout << "Logging out successfully... Have a nice day!" << endl;
+            cout << "\n\tLogging out successfully... Have a nice day!" << endl;
             system("pause");
             system("cls");
             return true;
         }
 
-        else if (confirm == 'n' || confirm == 'N') {
-            cout << "Returning to student menu" << endl;
+        else if (confirm == 'n' || confirm == 'N') 
             return false;
-        }
 
         else {
-            cout << "Invalid input! Please enter 'y' for Yes or 'n' for No." << endl;
+            cout << "\n\tInvalid input! Please enter 'y' for Yes or 'n' for No." << endl;
             cin.clear();
-            cin.ignore(1000, '\n');
         }
     }
 }

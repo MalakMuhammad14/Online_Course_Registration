@@ -54,6 +54,17 @@ bool isValidInstructor(string name) {
     return true;
 }
 
+int isNumber() {
+    int x;
+    while (!(cin >> x) || x < 0) {
+        cout << "\n\tInvalid input! Please try again:";
+        cin.clear();
+        cin.ignore(100, '\n');
+    }
+    cin.ignore();
+    return x;
+}
+
 // =============== INITIAL DATA (DEFAULT) =================
 void initData() {
     students[0] = { 1, "Ali", "123", 1, {0}, 0 };

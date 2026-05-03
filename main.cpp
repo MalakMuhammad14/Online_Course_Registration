@@ -2,14 +2,14 @@
 #include "globals.h"
 
 int main() {
-    loadAllData();
-    //initData();
+    //loadAllData();
+    initData();
     showWelcome();
 
     int choice;
     do {
         mainMenu();
-        cin >> choice;
+        choice = isNumber();
         system("cls");
 
         switch (choice) {
@@ -20,11 +20,11 @@ int main() {
             adminPortal();
             break;
         case 0:
-            saveAllData();
+            //saveAllData();
             cout << "Goodbye!"<< endl;
             break;
         default :
-            cout << "Invalid choice!" << endl;
+            cout << "\tInvalid choice! Please try again." << endl;
         }
     } while (choice != 0);
     return 0;
